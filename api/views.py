@@ -6,6 +6,7 @@ from .serializers import LoginSerializer, KYCFormSerializer
 class LoginView(APIView):
     
     def post(self, request):
+        """Handles user login by verifying phone and password."""
         serializer = LoginSerializer(data=request.data)
 
         if serializer.is_valid():
@@ -24,6 +25,7 @@ class LoginView(APIView):
         return Response(serializer.errors, status=400)
     
     def get(self, request):
+        """Returns all user records (for testing/debug purposes)."""
         try:
             users = User.objects.all()
 
@@ -39,6 +41,7 @@ class LoginView(APIView):
 class UploadKYCFormView(APIView):
     
     def post(self, request):
+        """Accepts and saves KYC form data submitted by the user."""
         serializer = KYCFormSerializer(data=request.data)
         
         if serializer.is_valid():
@@ -49,6 +52,7 @@ class UploadKYCFormView(APIView):
 
 
     def get(self, request):
+        """Fetches all KYC forms submitted by a given user (by user ID)."""
         user_id  = request.query_params.get('user')
         if not user_id:
             return Response({'error': 'user ID is required in query params'}, status=400)
